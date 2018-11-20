@@ -185,7 +185,7 @@ namespace DownloaderCPP {
 			this->lbPort->AutoSize = true;
 			this->lbPort->BackColor = System::Drawing::SystemColors::MenuHighlight;
 			this->lbPort->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->lbPort->Location = System::Drawing::Point(453, 15);
+			this->lbPort->Location = System::Drawing::Point(451, 15);
 			this->lbPort->Name = L"lbPort";
 			this->lbPort->Size = System::Drawing::Size(29, 13);
 			this->lbPort->TabIndex = 3;
