@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+
+//#define DEBUG
 
 namespace DownloaderCPP {
 
@@ -33,10 +36,11 @@ namespace DownloaderCPP {
 	private: System::Windows::Forms::Label^  lbPort;
 	private: System::Windows::Forms::ComboBox^  cbPort;
 	private: System::Windows::Forms::Button^  btnDownload;
-	private: System::Windows::Forms::Button^  btnClose;
+
 	private: System::Windows::Forms::TextBox^  tbInformacja;
-	private: System::Windows::Forms::LinkLabel^  llBiotronika;
+
 	private: System::Windows::Forms::Timer^  tmClose;
+	private: System::Windows::Forms::PictureBox^  pictureBox1;
 
 
 			 StringComparer^ stringComparer;
@@ -50,9 +54,32 @@ namespace DownloaderCPP {
 			therapy = gcnew List<String^>();
 			fileName = Environment::GetCommandLineArgs()[0];
 			fileName = System::IO::Path::GetFileNameWithoutExtension(fileName);
-			//fileName = "28";
-			//tbInformacja->Text = fileName;
-			//odczytujemy listê dostêpnych portów szeregowych			
+
+
+#ifdef DEBUG
+			//tbInformacja->Text = s;
+			fileName = "153 (2)";
+
+
+#endif // DEBUG
+
+			// 2018-11-18 elektros: Find orginal file name
+			// Windows adds sufix to the filename of downloded one with identical name
+			int spacePos = fileName->IndexOf(" ");
+			
+			if (spacePos>0) {
+
+				fileName = fileName->Substring(0, spacePos);
+			}
+
+
+			// 2018-11-18 elektros
+			if (fileName != "DownloaderCPP") {
+				tbInformacja->Text = "Therapy script number: " + fileName;
+				tbInformacja->Text += "\r\n";
+			}
+
+			// Read list of available com ports		
 			ReadComPortList();
 
 			btnDownload->Enabled = !myError;
@@ -100,7 +127,7 @@ namespace DownloaderCPP {
 
 	protected:
 		/// <summary>
-		/// Wyczyœæ wszystkie u¿ywane zasoby.
+		/// Clear all resources
 		/// </summary>
 		~MainFrm()
 		{
@@ -129,45 +156,36 @@ namespace DownloaderCPP {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainFrm::typeid));
 			this->pnTop = (gcnew System::Windows::Forms::Panel());
-			this->llBiotronika = (gcnew System::Windows::Forms::LinkLabel());
 			this->lbPort = (gcnew System::Windows::Forms::Label());
 			this->cbPort = (gcnew System::Windows::Forms::ComboBox());
 			this->btnDownload = (gcnew System::Windows::Forms::Button());
-			this->btnClose = (gcnew System::Windows::Forms::Button());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->tbInformacja = (gcnew System::Windows::Forms::TextBox());
 			this->tmClose = (gcnew System::Windows::Forms::Timer(this->components));
 			this->pnTop->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pnTop
 			// 
-			this->pnTop->Controls->Add(this->llBiotronika);
 			this->pnTop->Controls->Add(this->lbPort);
 			this->pnTop->Controls->Add(this->cbPort);
 			this->pnTop->Controls->Add(this->btnDownload);
-			this->pnTop->Controls->Add(this->btnClose);
+			this->pnTop->Controls->Add(this->pictureBox1);
 			this->pnTop->Dock = System::Windows::Forms::DockStyle::Top;
 			this->pnTop->Location = System::Drawing::Point(0, 0);
 			this->pnTop->Name = L"pnTop";
-			this->pnTop->Size = System::Drawing::Size(667, 45);
+			this->pnTop->Size = System::Drawing::Size(698, 86);
 			this->pnTop->TabIndex = 1;
-			// 
-			// llBiotronika
-			// 
-			this->llBiotronika->AutoSize = true;
-			this->llBiotronika->Location = System::Drawing::Point(506, 15);
-			this->llBiotronika->Name = L"llBiotronika";
-			this->llBiotronika->Size = System::Drawing::Size(68, 13);
-			this->llBiotronika->TabIndex = 4;
-			this->llBiotronika->TabStop = true;
-			this->llBiotronika->Text = L"biotronika.eu";
-			this->llBiotronika->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &MainFrm::llBiotronika_LinkClicked);
 			// 
 			// lbPort
 			// 
 			this->lbPort->AutoSize = true;
-			this->lbPort->Location = System::Drawing::Point(12, 15);
+			this->lbPort->BackColor = System::Drawing::SystemColors::MenuHighlight;
+			this->lbPort->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->lbPort->Location = System::Drawing::Point(452, 15);
 			this->lbPort->Name = L"lbPort";
 			this->lbPort->Size = System::Drawing::Size(29, 13);
 			this->lbPort->TabIndex = 3;
@@ -177,14 +195,14 @@ namespace DownloaderCPP {
 			// 
 			this->cbPort->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cbPort->FormattingEnabled = true;
-			this->cbPort->Location = System::Drawing::Point(47, 12);
+			this->cbPort->Location = System::Drawing::Point(484, 12);
 			this->cbPort->Name = L"cbPort";
 			this->cbPort->Size = System::Drawing::Size(121, 21);
 			this->cbPort->TabIndex = 2;
 			// 
 			// btnDownload
 			// 
-			this->btnDownload->Location = System::Drawing::Point(174, 12);
+			this->btnDownload->Location = System::Drawing::Point(611, 10);
 			this->btnDownload->Name = L"btnDownload";
 			this->btnDownload->Size = System::Drawing::Size(75, 23);
 			this->btnDownload->TabIndex = 1;
@@ -192,25 +210,26 @@ namespace DownloaderCPP {
 			this->btnDownload->UseVisualStyleBackColor = true;
 			this->btnDownload->Click += gcnew System::EventHandler(this, &MainFrm::btnDownload_Click);
 			// 
-			// btnClose
+			// pictureBox1
 			// 
-			this->btnClose->Location = System::Drawing::Point(580, 10);
-			this->btnClose->Name = L"btnClose";
-			this->btnClose->Size = System::Drawing::Size(75, 23);
-			this->btnClose->TabIndex = 0;
-			this->btnClose->Text = L"Close";
-			this->btnClose->UseVisualStyleBackColor = true;
-			this->btnClose->Click += gcnew System::EventHandler(this, &MainFrm::btnClose_Click);
+			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
+			this->pictureBox1->Location = System::Drawing::Point(0, 0);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(698, 86);
+			this->pictureBox1->TabIndex = 5;
+			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Click += gcnew System::EventHandler(this, &MainFrm::pictureBox1_Click);
 			// 
 			// tbInformacja
 			// 
 			this->tbInformacja->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->tbInformacja->Location = System::Drawing::Point(0, 41);
+			this->tbInformacja->Location = System::Drawing::Point(0, 86);
 			this->tbInformacja->Multiline = true;
 			this->tbInformacja->Name = L"tbInformacja";
 			this->tbInformacja->ReadOnly = true;
 			this->tbInformacja->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->tbInformacja->Size = System::Drawing::Size(667, 231);
+			this->tbInformacja->Size = System::Drawing::Size(698, 245);
 			this->tbInformacja->TabIndex = 2;
 			// 
 			// tmClose
@@ -222,24 +241,25 @@ namespace DownloaderCPP {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(667, 272);
+			this->ClientSize = System::Drawing::Size(698, 331);
 			this->Controls->Add(this->tbInformacja);
 			this->Controls->Add(this->pnTop);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
 			this->Name = L"MainFrm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Downloader - Biotronika.eu";
+			this->Text = L"Script downloader";
 			this->Shown += gcnew System::EventHandler(this, &MainFrm::MainFrm_Shown);
 			this->pnTop->ResumeLayout(false);
 			this->pnTop->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	private: System::Void btnClose_Click(System::Object^  sender, System::EventArgs^  e) {
-		Close();
-	}
+	//private: System::Void btnClose_Click(System::Object^  sender, System::EventArgs^  e) {
+	//	Close();
+	//}
 	private: System::Void ShowError(String^ message)
 	{
 		MessageBox::Show(this, message, "Error", MessageBoxButtons::OK);
@@ -247,15 +267,15 @@ namespace DownloaderCPP {
 		//tbInformacja->Lines->Add( message );
 	}
 private: System::Void llBiotronika_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
-	try
+/*	try
 	{
-		System::Diagnostics::Process::Start("https://biotronika.pl/");
+		System::Diagnostics::Process::Start("https://biotronics.eu/");
 		llBiotronika->LinkVisited = true;
 	}
 	catch (Exception^ ex)
 	{
 		ShowError(ex->Message);
-	}
+	}*/
 }
 private: System::Void tmClose_Tick(System::Object^  sender, System::EventArgs^  e) {
 	Close();
@@ -371,10 +391,12 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 					linia = "";
 				}
 			}
-
+			Thread::Sleep(2000);
 			serialWrite("mem");
 			serialWrite("@");
+			//serialWrite("rm");
 
+			Thread::Sleep(200);
 			for (int licznik = 0; licznik < therapy->Count; licznik++)
 			{
 				linia = therapy[licznik];
@@ -382,13 +404,24 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 				serialWrite(linia);
 				serialWrite("@");
 				tbInformacja->Text += linia + "\r\n";
-				Thread::Sleep(100);
+				Thread::Sleep(200);
 			}
 		}
 		catch (Exception^) {
 
 		}
 		ClosePort();
+	}
+}
+private: System::Void pictureBox1_Click(System::Object^  sender, System::EventArgs^  e) {
+	try
+	{
+		System::Diagnostics::Process::Start("http://biotronics.eu/");
+		//llBiotronika->LinkVisited = true;
+	}
+	catch (Exception^ ex)
+	{
+		ShowError(ex->Message);
 	}
 }
 };
