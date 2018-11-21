@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-//#define DEBUG
+#define DEBUG
 
 namespace DownloaderCPP {
 
@@ -41,6 +41,7 @@ namespace DownloaderCPP {
 
 	private: System::Windows::Forms::Timer^  tmClose;
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
+	private: System::Windows::Forms::Button^  btnLIst;
 
 
 			 StringComparer^ stringComparer;
@@ -75,7 +76,7 @@ namespace DownloaderCPP {
 
 			// 2018-11-18 elektros
 			if (fileName != "DownloaderCPP") {
-				tbInformacja->Text = "Therapy script number: " + fileName;
+				tbInformacja->Text = "$Therapy script number: " + fileName;
 				tbInformacja->Text += "\r\n";
 			}
 
@@ -83,10 +84,12 @@ namespace DownloaderCPP {
 			ReadComPortList();
 
 			btnDownload->Enabled = !myError;
-			tmClose->Enabled = myError;
+			//tmClose->Enabled = myError;
 			if (myError)
 			{
-				tbInformacja->Text += "\r\nClosing!";
+				//tbInformacja->Text += "\r\nClosing!";
+				tbInformacja->Text += "\r\n";
+				tbInformacja->Text += "$There is no proper COM port. Connect device and restart script downloader application.";
 			}
 		}
 
@@ -158,57 +161,25 @@ namespace DownloaderCPP {
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainFrm::typeid));
 			this->pnTop = (gcnew System::Windows::Forms::Panel());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->lbPort = (gcnew System::Windows::Forms::Label());
 			this->cbPort = (gcnew System::Windows::Forms::ComboBox());
 			this->btnDownload = (gcnew System::Windows::Forms::Button());
-			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->tbInformacja = (gcnew System::Windows::Forms::TextBox());
 			this->tmClose = (gcnew System::Windows::Forms::Timer(this->components));
+			this->btnLIst = (gcnew System::Windows::Forms::Button());
 			this->pnTop->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pnTop
 			// 
-			this->pnTop->Controls->Add(this->lbPort);
-			this->pnTop->Controls->Add(this->cbPort);
-			this->pnTop->Controls->Add(this->btnDownload);
 			this->pnTop->Controls->Add(this->pictureBox1);
 			this->pnTop->Dock = System::Windows::Forms::DockStyle::Top;
 			this->pnTop->Location = System::Drawing::Point(0, 0);
 			this->pnTop->Name = L"pnTop";
 			this->pnTop->Size = System::Drawing::Size(698, 86);
 			this->pnTop->TabIndex = 1;
-			// 
-			// lbPort
-			// 
-			this->lbPort->AutoSize = true;
-			this->lbPort->BackColor = System::Drawing::SystemColors::MenuHighlight;
-			this->lbPort->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->lbPort->Location = System::Drawing::Point(451, 15);
-			this->lbPort->Name = L"lbPort";
-			this->lbPort->Size = System::Drawing::Size(29, 13);
-			this->lbPort->TabIndex = 3;
-			this->lbPort->Text = L"Port:";
-			// 
-			// cbPort
-			// 
-			this->cbPort->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-			this->cbPort->FormattingEnabled = true;
-			this->cbPort->Location = System::Drawing::Point(484, 12);
-			this->cbPort->Name = L"cbPort";
-			this->cbPort->Size = System::Drawing::Size(121, 21);
-			this->cbPort->TabIndex = 2;
-			// 
-			// btnDownload
-			// 
-			this->btnDownload->Location = System::Drawing::Point(611, 10);
-			this->btnDownload->Name = L"btnDownload";
-			this->btnDownload->Size = System::Drawing::Size(75, 23);
-			this->btnDownload->TabIndex = 1;
-			this->btnDownload->Text = L"Download";
-			this->btnDownload->UseVisualStyleBackColor = true;
-			this->btnDownload->Click += gcnew System::EventHandler(this, &MainFrm::btnDownload_Click);
 			// 
 			// pictureBox1
 			// 
@@ -221,15 +192,47 @@ namespace DownloaderCPP {
 			this->pictureBox1->TabStop = false;
 			this->pictureBox1->Click += gcnew System::EventHandler(this, &MainFrm::pictureBox1_Click);
 			// 
+			// lbPort
+			// 
+			this->lbPort->AutoSize = true;
+			this->lbPort->BackColor = System::Drawing::SystemColors::MenuBar;
+			this->lbPort->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->lbPort->Location = System::Drawing::Point(4, 95);
+			this->lbPort->Name = L"lbPort";
+			this->lbPort->Size = System::Drawing::Size(29, 13);
+			this->lbPort->TabIndex = 3;
+			this->lbPort->Text = L"Port:";
+			this->lbPort->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
+			// 
+			// cbPort
+			// 
+			this->cbPort->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->cbPort->FormattingEnabled = true;
+			this->cbPort->Location = System::Drawing::Point(37, 91);
+			this->cbPort->Name = L"cbPort";
+			this->cbPort->Size = System::Drawing::Size(121, 21);
+			this->cbPort->TabIndex = 2;
+			// 
+			// btnDownload
+			// 
+			this->btnDownload->Location = System::Drawing::Point(166, 90);
+			this->btnDownload->Name = L"btnDownload";
+			this->btnDownload->Size = System::Drawing::Size(75, 23);
+			this->btnDownload->TabIndex = 1;
+			this->btnDownload->Tag = L"aaa";
+			this->btnDownload->Text = L"Download";
+			this->btnDownload->UseVisualStyleBackColor = true;
+			this->btnDownload->Click += gcnew System::EventHandler(this, &MainFrm::btnDownload_Click);
+			// 
 			// tbInformacja
 			// 
 			this->tbInformacja->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->tbInformacja->Location = System::Drawing::Point(0, 86);
+			this->tbInformacja->Location = System::Drawing::Point(0, 118);
 			this->tbInformacja->Multiline = true;
 			this->tbInformacja->Name = L"tbInformacja";
 			this->tbInformacja->ReadOnly = true;
 			this->tbInformacja->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->tbInformacja->Size = System::Drawing::Size(698, 245);
+			this->tbInformacja->Size = System::Drawing::Size(698, 213);
 			this->tbInformacja->TabIndex = 2;
 			// 
 			// tmClose
@@ -237,12 +240,26 @@ namespace DownloaderCPP {
 			this->tmClose->Interval = 2000;
 			this->tmClose->Tick += gcnew System::EventHandler(this, &MainFrm::tmClose_Tick);
 			// 
+			// btnLIst
+			// 
+			this->btnLIst->Location = System::Drawing::Point(249, 90);
+			this->btnLIst->Name = L"btnLIst";
+			this->btnLIst->Size = System::Drawing::Size(75, 23);
+			this->btnLIst->TabIndex = 4;
+			this->btnLIst->Text = L"List - ls";
+			this->btnLIst->UseVisualStyleBackColor = true;
+			this->btnLIst->Click += gcnew System::EventHandler(this, &MainFrm::btnLIst_Click);
+			// 
 			// MainFrm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(698, 331);
+			this->Controls->Add(this->btnLIst);
+			this->Controls->Add(this->btnDownload);
+			this->Controls->Add(this->lbPort);
 			this->Controls->Add(this->tbInformacja);
+			this->Controls->Add(this->cbPort);
 			this->Controls->Add(this->pnTop);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
 			this->Name = L"MainFrm";
@@ -250,7 +267,6 @@ namespace DownloaderCPP {
 			this->Text = L"Script downloader";
 			this->Shown += gcnew System::EventHandler(this, &MainFrm::MainFrm_Shown);
 			this->pnTop->ResumeLayout(false);
-			this->pnTop->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -262,8 +278,8 @@ namespace DownloaderCPP {
 	//}
 	private: System::Void ShowError(String^ message)
 	{
-		MessageBox::Show(this, message, "Error", MessageBoxButtons::OK);
-		tbInformacja->Text += message + "\r\n";
+		//MessageBox::Show(this, message, "Error", MessageBoxButtons::OK);
+		tbInformacja->Text += "$" +message + "\r\n";
 		//tbInformacja->Lines->Add( message );
 	}
 private: System::Void llBiotronika_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
@@ -307,7 +323,9 @@ private: System::Void tmClose_Tick(System::Object^  sender, System::EventArgs^  
 		if (therapy->Count <= 0)
 		{
 			ShowError("Invalid therapy");
-			tmClose->Enabled = true;
+			//tmClose->Enabled = true;
+			btnDownload->Enabled = false;
+
 		}
 
 		response->Close();
@@ -369,7 +387,7 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 	//tbInformacja->Text = cbPort->Text;
 	if (OpenPort(cbPort->Text))
 	{
-		tbInformacja->Text = "";
+		tbInformacja->Text = "$"+ cbPort->Text+":Script download";
 
 		String^ linia;
 
@@ -391,12 +409,12 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 					linia = "";
 				}
 			}
-			Thread::Sleep(2000);
+			Thread::Sleep(1500);
 			serialWrite("mem");
 			serialWrite("@");
 			//serialWrite("rm");
 
-			Thread::Sleep(200);
+			Thread::Sleep(150);
 			for (int licznik = 0; licznik < therapy->Count; licznik++)
 			{
 				linia = therapy[licznik];
@@ -404,7 +422,8 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 				serialWrite(linia);
 				serialWrite("@");
 				tbInformacja->Text += linia + "\r\n";
-				Thread::Sleep(200);
+				tbInformacja->Refresh();
+				Thread::Sleep(150);
 			}
 		}
 		catch (Exception^) {
@@ -423,6 +442,79 @@ private: System::Void pictureBox1_Click(System::Object^  sender, System::EventAr
 	{
 		ShowError(ex->Message);
 	}
+}
+private: System::Void btnLIst_Click(System::Object^  sender, System::EventArgs^  e) {
+	//tbInformacja->Text = cbPort->Text;
+	if (OpenPort(cbPort->Text))
+	{
+		tbInformacja->Text = "$"+cbPort->Text+":Script list - ls";
+
+		String^ linia;
+
+		try
+		{
+			DateTime czas = DateTime::Now;
+
+			
+			while ((DateTime::Now - czas).TotalMilliseconds < 1500)
+			{
+				try
+				{
+					linia = _serialPort->ReadLine();
+				}
+				catch (Exception^) {}
+
+				if (linia != "")
+				{
+					tbInformacja->Text += linia + "\r\n";
+					linia = "";
+				}
+			}
+			Thread::Sleep(1500);
+
+
+			serialWrite("ls\r\n");
+
+			czas = DateTime::Now;
+
+			while ((DateTime::Now - czas).TotalMilliseconds < 2000)
+			{
+				try
+				{
+					linia = _serialPort->ReadLine();
+				}
+				catch (Exception^) {}
+
+				if (linia != "")
+				{
+					tbInformacja->Text += linia + "\r\n";
+					tbInformacja->Refresh();
+					linia = "";
+				}
+			}
+
+
+
+			//serialWrite("@");
+			//serialWrite("rm");
+
+			//Thread::Sleep(200);
+			/*for (int licznik = 0; licznik < therapy->Count; licznik++)
+			{
+				linia = therapy[licznik];
+				serialWrite("mem @");
+				serialWrite(linia);
+				serialWrite("@");
+				tbInformacja->Text += linia + "\r\n";
+				Thread::Sleep(200);
+			}*/
+		}
+		catch (Exception^) {
+
+		}
+		ClosePort();
+	}
+
 }
 };
 }
