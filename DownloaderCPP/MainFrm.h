@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-//#define DEBUG
+#define DEBUG
 
 namespace DownloaderCPP {
 
@@ -19,6 +19,7 @@ namespace DownloaderCPP {
 	using namespace System::Text;
 	using namespace System::Threading;
 	using namespace System::Collections::Generic;
+	
 	/// <summary>
 	/// Podsumowanie informacji o MainFrm
 	/// </summary>
@@ -42,6 +43,7 @@ namespace DownloaderCPP {
 	private: System::Windows::Forms::Timer^  tmClose;
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::Button^  btnLIst;
+	private: System::Windows::Forms::ToolTip^  toolTip1;
 
 
 			 StringComparer^ stringComparer;
@@ -168,6 +170,7 @@ namespace DownloaderCPP {
 			this->tbInformacja = (gcnew System::Windows::Forms::TextBox());
 			this->tmClose = (gcnew System::Windows::Forms::Timer(this->components));
 			this->btnLIst = (gcnew System::Windows::Forms::Button());
+			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->pnTop->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -234,6 +237,7 @@ namespace DownloaderCPP {
 			this->tbInformacja->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->tbInformacja->Size = System::Drawing::Size(698, 213);
 			this->tbInformacja->TabIndex = 2;
+			this->tbInformacja->TextChanged += gcnew System::EventHandler(this, &MainFrm::tbInformacja_TextChanged);
 			// 
 			// tmClose
 			// 
@@ -250,17 +254,25 @@ namespace DownloaderCPP {
 			this->btnLIst->UseVisualStyleBackColor = true;
 			this->btnLIst->Click += gcnew System::EventHandler(this, &MainFrm::btnLIst_Click);
 			// 
+			// toolTip1
+			// 
+			this->toolTip1->AutoPopDelay = 5000;
+			this->toolTip1->InitialDelay = 1000;
+			this->toolTip1->ReshowDelay = 500;
+			this->toolTip1->SetToolTip(this->btnLIst, "List program script saved in the device EEPROM memory.");
+			this->toolTip1->SetToolTip(this->btnDownload, "Set right COM port and press Download button to save script in the device EEPROM memory.");
+			// 
 			// MainFrm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(698, 331);
-			this->Controls->Add(this->btnLIst);
-			this->Controls->Add(this->btnDownload);
 			this->Controls->Add(this->lbPort);
 			this->Controls->Add(this->tbInformacja);
-			this->Controls->Add(this->cbPort);
 			this->Controls->Add(this->pnTop);
+			this->Controls->Add(this->btnDownload);
+			this->Controls->Add(this->btnLIst);
+			this->Controls->Add(this->cbPort);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
 			this->Name = L"MainFrm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
@@ -325,6 +337,9 @@ private: System::Void tmClose_Tick(System::Object^  sender, System::EventArgs^  
 			ShowError("Invalid therapy");
 			//tmClose->Enabled = true;
 			btnDownload->Enabled = false;
+			
+			
+			//toolTip1->ShowAlways = true;
 
 		}
 
@@ -333,7 +348,10 @@ private: System::Void tmClose_Tick(System::Object^  sender, System::EventArgs^  
 	}
 
 
+
 private: System::Void MainFrm_Shown(System::Object^  sender, System::EventArgs^  e) {
+	
+
 	if (!myError)
 	{
 		getScript();
@@ -515,6 +533,8 @@ private: System::Void btnLIst_Click(System::Object^  sender, System::EventArgs^ 
 		ClosePort();
 	}
 
+}
+private: System::Void tbInformacja_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 }
 };
 }
