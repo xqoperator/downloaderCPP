@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-//#define DEBUG
+#define DEBUG
 
 namespace DownloaderCPP {
 
@@ -46,6 +46,7 @@ namespace DownloaderCPP {
 
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::Button^  btnExe;
+	private: System::Windows::Forms::Button^  btnRm;
 
 
 			 StringComparer^ stringComparer;
@@ -174,6 +175,7 @@ namespace DownloaderCPP {
 			this->btnList = (gcnew System::Windows::Forms::Button());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->btnExe = (gcnew System::Windows::Forms::Button());
+			this->btnRm = (gcnew System::Windows::Forms::Button());
 			this->pnTop->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -226,11 +228,8 @@ namespace DownloaderCPP {
 			this->btnDownload->Size = System::Drawing::Size(75, 23);
 			this->btnDownload->TabIndex = 1;
 			this->btnDownload->Tag = L"aaa";
-			this->toolTip1->SetToolTip(this->btnDownload, L"Save script into the device memory."
-				L"memory.");
 			this->btnDownload->Text = L"Download";
-
-
+			this->toolTip1->SetToolTip(this->btnDownload, L"Save script into the device memory.memory.");
 			this->btnDownload->UseVisualStyleBackColor = true;
 			this->btnDownload->Click += gcnew System::EventHandler(this, &MainFrm::btnDownload_Click);
 			// 
@@ -280,11 +279,23 @@ namespace DownloaderCPP {
 			this->btnExe->UseVisualStyleBackColor = true;
 			this->btnExe->Click += gcnew System::EventHandler(this, &MainFrm::btnExe_Click);
 			// 
+			// btnRm
+			// 
+			this->btnRm->Location = System::Drawing::Point(338, 90);
+			this->btnRm->Name = L"btnRm";
+			this->btnRm->Size = System::Drawing::Size(37, 23);
+			this->btnRm->TabIndex = 6;
+			this->btnRm->Text = L"rm";
+			this->toolTip1->SetToolTip(this->btnRm, L"Remove script from device memory.");
+			this->btnRm->UseVisualStyleBackColor = true;
+			this->btnRm->Click += gcnew System::EventHandler(this, &MainFrm::btnRm_Click);
+			// 
 			// MainFrm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(698, 331);
+			this->Controls->Add(this->btnRm);
 			this->Controls->Add(this->btnExe);
 			this->Controls->Add(this->lbPort);
 			this->Controls->Add(this->tbInformacja);
@@ -447,7 +458,8 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 				}
 			}
 			Thread::Sleep(1500);
-			serialWrite("mem");
+			serialWrite("mem\n");
+			Thread::Sleep(15);
 			serialWrite("@");
 			//serialWrite("rm");
 
@@ -456,7 +468,9 @@ private: System::Void btnDownload_Click(System::Object^  sender, System::EventAr
 			{
 				linia = therapy[licznik];
 				serialWrite("mem @");
+				Thread::Sleep(15);
 				serialWrite(linia);
+				Thread::Sleep(15);
 				serialWrite("@");
 				tbInformacja->Text += linia + "\r\n";
 				tbInformacja->Refresh();
@@ -606,19 +620,6 @@ private: System::Void btnExe_Click(System::Object^  sender, System::EventArgs^  
 
 
 
-			//serialWrite("@");
-			//serialWrite("rm");
-
-			//Thread::Sleep(200);
-			/*for (int licznik = 0; licznik < therapy->Count; licznik++)
-			{
-				linia = therapy[licznik];
-				serialWrite("mem @");
-				serialWrite(linia);
-				serialWrite("@");
-				tbInformacja->Text += linia + "\r\n";
-				Thread::Sleep(200);
-			}*/
 		}
 		catch (Exception^) {
 
@@ -626,6 +627,64 @@ private: System::Void btnExe_Click(System::Object^  sender, System::EventArgs^  
 		ClosePort();
 	}
 
+}
+private: System::Void btnRm_Click(System::Object^  sender, System::EventArgs^  e) {
+	if (OpenPort(cbPort->Text))
+	{
+		tbInformacja->Text = "$" + cbPort->Text + ">exe";
+
+		String^ linia;
+
+		try
+		{
+			DateTime czas = DateTime::Now;
+
+
+			while ((DateTime::Now - czas).TotalMilliseconds < 1500)
+			{
+				try
+				{
+					linia = _serialPort->ReadLine();
+				}
+				catch (Exception^) {}
+
+				if (linia != "")
+				{
+					tbInformacja->Text += linia + "\r\n";
+					linia = "";
+				}
+			}
+			Thread::Sleep(1500);
+
+
+			serialWrite("rm\n");
+
+			czas = DateTime::Now;
+
+			while ((DateTime::Now - czas).TotalMilliseconds < 2000)
+			{
+				try
+				{
+					linia = _serialPort->ReadLine();
+				}
+				catch (Exception^) {}
+
+				if (linia != "")
+				{
+					tbInformacja->Text += linia + "\r\n";
+					tbInformacja->Refresh();
+					linia = "";
+				}
+			}
+
+
+
+		}
+		catch (Exception^) {
+
+		}
+		ClosePort();
+	}
 }
 };
 }
