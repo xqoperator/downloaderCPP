@@ -121,7 +121,7 @@
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAxQAAABWCAIAAADZmUc8AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAJH5JREFUeF7tnQl8FFWex0txBNfRWdHd0Zl1vBUVxQsRVm7PcdxxxvHAGXZ01VHc
+        vAAADrwBlbxySQAAJH5JREFUeF7tnQl8FFWex0txBNfRWdHd0Zl1vBUVxQsRVm7PcdxxxvHAGXZ01VHc
         2V0PVEAFESI3CCEkEEKSvkK600k6dwCTQEJCyAEhIQkJuYjkIDfkIjawr6peVb33qqrpTneDo///5/vh
         0/1///q///9VddWP7k41d83/7QIAAAAAAADchLvm/V0AAAAAAACAm3Cj3/8WAAAAAAAAcBPu2g8yAAAA
         AAAAADfhrv0wAwAAAAAAAHAT7roPMwEAAAAAAAA34a77KPOiM37hzoCQxGWbMX9YlsYEAAAAAAAA/EDg
@@ -283,10 +283,10 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>113, 17</value>
   </metadata>
-  <metadata name="tbInformacja.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="tmClose.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="ofd.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>210, 17</value>
   </metadata>
 </root>
